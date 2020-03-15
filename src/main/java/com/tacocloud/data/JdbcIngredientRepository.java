@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Repository
 public class JdbcIngredientRepository implements IngredientRepository {
@@ -23,8 +24,9 @@ public class JdbcIngredientRepository implements IngredientRepository {
     }
 
     @Override
-    public Ingredient findById(String id) {
-        return jdbcTemplate.queryForObject("select id, ingredient_name, ingredient_type from Ingredient where id=?", this::mapRowToIngredient, id);
+    public Optional<Ingredient> findById(String id) {
+        Ingredient ingredient = jdbcTemplate.queryForObject("select id, ingredient_name, ingredient_type from Ingredient where id=?", this::mapRowToIngredient, id);
+        return Optional.of(ingredient);
     }
 
     @Override

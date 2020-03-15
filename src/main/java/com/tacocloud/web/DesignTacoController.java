@@ -1,34 +1,48 @@
 package com.tacocloud.web;
 
 import com.tacocloud.data.IngredientRepository;
+import com.tacocloud.data.TacoRepository;
 import com.tacocloud.models.Ingredient;
 import com.tacocloud.models.Ingredient.Type;
+import com.tacocloud.models.Order;
 import com.tacocloud.models.Taco;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
 @RequestMapping("/design")
+@SessionAttributes("order")
 public class DesignTacoController {
 
     private final IngredientRepository ingredientRepo;
+    private final TacoRepository tacoRepository;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepo) {
+    public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepository) {
         this.ingredientRepo = ingredientRepo;
+        this.tacoRepository = tacoRepository;
+    }
+
+    @ModelAttribute(name = "order")
+    public Order order(){
+        Order order = new Order();
+        System.out.println("order created "+order.hashCode());
+        return order;
+    }
+
+    @ModelAttribute(name = "taco")
+    public Taco taco(){
+        return new Taco();
     }
 
     @GetMapping
@@ -58,11 +72,14 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processDesign(@Valid Taco design, Errors errors){
+    public String processDesign(@Valid Taco tacoDesign, Errors errors, @ModelAttribute(name = "order") Order order){
         if(errors.hasErrors()){
             return "design";
         }
-        log.info("processing Taco design: "+design);
+        Taco savedTaco = tacoRepository.save(tacoDesign);
+        System.out.println("first model order "+order.hashCode());
+        order.addTaco(tacoDesign);
+        log.info("processing Taco design: "+tacoDesign);
         return "redirect:/orders/current";
     }
 

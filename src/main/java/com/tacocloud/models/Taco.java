@@ -9,12 +9,16 @@ import java.util.List;
 
 @Data
 public class Taco {
-    private Long id;
+
+    public Taco() {
+    }
+
+    private int id;
     private Date createdAt;
     @NotNull
     @Size(min = 5, message = "Name min size is 5 characters")
     private String taco_name;
 
     @Size(min = 1, message = "You have to choose at least one ingredient")
-    private List<String> ingredients;
+    private List<Ingredient> ingredients;
 }
