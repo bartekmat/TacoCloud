@@ -1,6 +1,5 @@
-package com.tacocloud.services;
+package com.tacocloud.security;
 
-import com.tacocloud.data.UserRepository;
 import com.tacocloud.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
