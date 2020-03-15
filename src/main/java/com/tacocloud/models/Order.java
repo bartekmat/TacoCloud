@@ -3,18 +3,26 @@ package com.tacocloud.models;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Data
+@Entity
+@Table(name = "Taco_Order")
 public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private Date placedAt;
+
+    private LocalDateTime placedAt;
 
     @NotBlank(message = "name is mandatory")
     private String customer_name;
@@ -37,9 +45,15 @@ public class Order {
     @Digits(integer = 3, fraction = 0, message = "invalid CVV code")
     private String ccCVV;
 
+    @ManyToMany(targetEntity = Taco.class)
     private List<Taco> tacos = new ArrayList<>();
 
     public void addTaco(Taco taco){
         this.tacos.add(taco);
+    }
+
+    @PrePersist
+    private void placeAt(){
+        this.placedAt = LocalDateTime.now();
     }
 }

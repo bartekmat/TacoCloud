@@ -1,15 +1,25 @@
 package com.tacocloud.models;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
 
 @Data
-@RequiredArgsConstructor
+@Entity
 public class Ingredient {
 
-    private final String id;
-    private final  String ingredient_name;
-    private final  Type ingredient_type;
+    @Id
+    private String id;
+    private String ingredient_name;
+
+    @Enumerated(EnumType.STRING)
+    private Type ingredient_type;
+
+    public Ingredient() {
+    }
 
     public static enum Type {
         WRAP, MEAT, VEGGIES, CHEESE, SAUCE
