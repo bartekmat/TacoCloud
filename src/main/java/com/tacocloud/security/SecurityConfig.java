@@ -1,4 +1,4 @@
-package com.tacocloud.security.config;
+package com.tacocloud.security;
 
 import com.tacocloud.security.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
                 .formLogin().loginPage("/login").defaultSuccessUrl("/design/", true)
         .and()
-                .logout().logoutSuccessUrl("/");
+                .logout().logoutSuccessUrl("/login");
 
     }
 }
